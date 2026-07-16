@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "video-platform.onrender.com",
+    "video-platform-a29d.onrender.com",
     "localhost",
     "127.0.0.1"]
 
@@ -127,7 +127,7 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://video-platform.onrender.com',
+    'https://video-platform-a29d.onrender.com',
 ]
 
 
