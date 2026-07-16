@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-title">📂 {{ category.name }}</h1>
+    
+    {% if category.description %}
+        <p class="category-description">{{ category.description }}</p>
+    {% endif %}
+    
+    {% if videos %}
+        <div class="video-grid">
+            {% for video in videos %}
+                <div class="video-card">
+                    
+                    <a href="{% url 'video_detail' video.id %}">
+                        {% if video.thumbnail %}
+                            <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="video-thumbnail">
+                        {% else %}
+                            <div class="video-thumbnail-placeholder">
+                                <span>🎬</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                    
+                    <div class="video-info">
+                        <a href="{% url 'video_detail' video.id %}" class="video-title">
+                            {{ video.title }}
+                        </a>
+                        <p class="video-creator">Par {{ video.creator.username }}</p>
+                        <div class="video-stats">
+                            <span>{{ video.views_count }} vues</span>
+                            <span>•</span>
+                            <span>{{ video.created_at|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>📭 Aucune vidéo dans cette catégorie pour le moment.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

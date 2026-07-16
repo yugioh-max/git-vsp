@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ video.title }} - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <div class="video-page">
+        
+        <!-- ===== LECTEUR VIDÉO ===== -->
+        <div class="video-player-container">
+            <video controls class="video-player">
+                <source src="{% url 'video_stream' video.id %}" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+        
+        <!-- ===== INFOS VIDÉO ===== -->
+        <div class="video-details">
+            
+            <!-- Titre -->
+            <h1 class="video-detail-title">{{ video.title }}</h1>
+            
+            <!-- Stats -->
+            <div class="video-meta">
+                <span>{{ video.views_count }} vues</span>
+                <span>•</span>
+                <span>{{ video.created_at|date:"d/m/Y" }}</span>
+                {% if video.category %}
+                    <span>•</span>
+                    <a href="{% url 'video_category' video.category.slug %}">
+                        {{ video.category.name }}
+                    </a>
+                {% endif %}
+            </div>
+            
+            <!-- Créateur + actions -->
+            <div class="video-actions">
+                
+                <div class="video-creator-info">
+                    <a href="#" class="video-creator-name">
+                        {{ video.creator.username }}
+                    </a>
+                </div>
+                
+                <div class="video-buttons">
+                    
+                    <!-- Like -->
+                    <a href="{% url 'video_like' video.id %}" class="btn-action {% if liked %}liked{% endif %}">
+                        {% if liked %}❤️{% else %}🤍{% endif %}
+                        {{ video.likes.count }}
+                    </a>
+                    
+                    <!-- Télécharger -->
+                    <a href="{% url 'video_download' video.id %}" class="btn-action">
+                        ⬇️ Télécharger
+                    </a>
+                    
+                    {% if user == video.creator %}
+                        <!-- Boutons propriétaire -->
+                        <a href="{% url 'video_edit' video.id %}" class="btn-action">
+                            ✏️ Modifier
+                        </a>
+                        <a href="{% url 'video_delete' video.id %}" class="btn-action btn-danger-action">
+                            🗑️ Supprimer
+                        </a>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="video-description-box">
+                <p class="video-description-label">Description</p>
+                <p>{{ video.description|linebreaks }}</p>
+                <!-- linebreaks = transforme les sauts de ligne en <br> -->
+            </div>
+            
+        </div>
+        
+        <!-- ===== COMMENTAIRES ===== -->
+        <div class="comments-section">
+            <h2 class="comments-title">
+                {{ comments.count }} commentaire{{ comments.count|pluralize }}
+                <!-- pluralize = ajoute un "s" si plusieurs -->
+            </h2>
+            
+            <!-- Formulaire de commentaire -->
+            {% if user.is_authenticated %}
+                <form method="POST" class="comment-form">
+                    {% csrf_token %}
+                    <textarea name="content" rows="3" placeholder="Écrire un commentaire..." required></textarea>
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </form>
+            {% else %}
+                <p class="comment-login-message">
+                    <a href="{% url 'login' %}">Connectez-vous</a> pour commenter.
+                </p>
+            {% endif %}
+            
+            <!-- Liste des commentaires -->
+            <div class="comments-list">
+                {% for comment in comments %}
+                    <div class="comment">
+                        <div class="comment-header">
+                            <strong>{{ comment.user.username }}</strong>
+                            <span class="comment-date">
+                                {{ comment.created_at|date:"d/m/Y à H:i" }}
+                            </span>
+                        </div>
+                        <p class="comment-content">{{ comment.content }}</p>
+                    </div>
+                {% empty %}
+                    <p class="no-comments">Aucun commentaire. Soyez le premier !</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+
+{% endblock %}

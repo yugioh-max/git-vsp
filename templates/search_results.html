@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Recherche : {{ query }} - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <h1 class="page-title">🔍 Résultats pour "{{ query }}"</h1>
+    
+    {% if videos %}
+        <p class="results-count">{{ videos.count }} vidéo{{ videos.count|pluralize }} trouvée{{ videos.count|pluralize }}</p>
+        
+        <div class="video-grid">
+            {% for video in videos %}
+                <div class="video-card">
+                    
+                    <a href="{% url 'video_detail' video.id %}">
+                        {% if video.thumbnail %}
+                            <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="video-thumbnail">
+                        {% else %}
+                            <div class="video-thumbnail-placeholder">
+                                <span>🎬</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                    
+                    <div class="video-info">
+                        <a href="{% url 'video_detail' video.id %}" class="video-title">
+                            {{ video.title }}
+                        </a>
+                        <p class="video-creator">Par {{ video.creator.username }}</p>
+                        <div class="video-stats">
+                            <span>{{ video.views_count }} vues</span>
+                            <span>•</span>
+                            <span>{{ video.created_at|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>😕 Aucune vidéo trouvée pour "{{ query }}".</p>
+            <p>Essayez un autre mot-clé.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

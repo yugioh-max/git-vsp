@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+<!-- extends = "J'utilise la structure de base.html" -->
+
+{% block title %}Accueil - VideoStreamingPlatform{% endblock %}
+<!-- Je change le titre de l'onglet -->
+
+{% block content %}
+<!-- Je remplis la zone de contenu définie dans base.html -->
+
+    <h1 class="page-title">📹 Dernières vidéos</h1>
+    
+    <!-- Si l'utilisateur est connecté, lui proposer d'uploader -->
+    {% if user.is_authenticated %}
+        <div class="upload-banner">
+            <p>Envie de partager une vidéo ?</p>
+            <a href="{% url 'video_upload' %}" class="btn btn-primary">📤 Uploader une vidéo</a>
+        </div>
+    {% endif %}
+    
+    <!-- Grille de vidéos -->
+    <div class="video-grid">
+        
+        {% for video in videos %}
+        <!-- On boucle sur chaque vidéo -->
+            <div class="video-card">
+                
+                <!-- Miniature cliquable -->
+                <a href="{% url 'video_detail' video.id %}">
+                    {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="video-thumbnail">
+                    {% else %}
+                        <div class="video-thumbnail-placeholder">
+                            <span>🎬</span>
+                        </div>
+                    {% endif %}
+                </a>
+                
+                <!-- Infos de la vidéo -->
+                <div class="video-info">
+                    
+                    <!-- Titre -->
+                    <a href="{% url 'video_detail' video.id %}" class="video-title">
+                        {{ video.title }}
+                    </a>
+                    
+                    <!-- Créateur -->
+                    <p class="video-creator">
+                        Par {{ video.creator.username }}
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="video-stats">
+                        <span>{{ video.views_count }} vues</span>
+                        <span>•</span>
+                        <span>{{ video.created_at|date:"d/m/Y" }}</span>
+                    </div>
+                    
+                    <!-- Catégorie -->
+                    {% if video.category %}
+                        <a href="{% url 'video_category' video.category.slug %}" class="video-category">
+                            {{ video.category.name }}
+                        </a>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            
+        {% empty %}
+        <!-- Si la liste est vide -->
+            <div class="empty-state">
+                <p>📭 Aucune vidéo pour le moment.</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'video_upload' %}" class="btn btn-primary">
+                        Publier la première vidéo
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+    </div>
+    
+{% endblock %}

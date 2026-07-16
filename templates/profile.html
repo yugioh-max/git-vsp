@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon profil - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <div class="profile-container">
+        
+        <h1 class="profile-title">👤 Mon profil</h1>
+        
+        <!-- Avatar actuel -->
+        <div class="profile-avatar-section">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="profile-avatar">
+            {% else %}
+                <div class="profile-avatar-placeholder">
+                    {{ user.username|slice:":1"|upper }}
+                </div>
+            {% endif %}
+            <p class="profile-username">{{ user.username }}</p>
+        </div>
+        
+        <!-- Formulaire -->
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_avatar">Photo de profil</label>
+                {{ form.avatar }}
+                <small class="form-help">Image carrée recommandée</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_channel_name">Nom de la chaîne</label>
+                {{ form.channel_name }}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_bio">Bio</label>
+                {{ form.bio }}
+                <small class="form-help">{{ form.bio.field.max_length }} caractères maximum</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+                💾 Enregistrer les modifications
+            </button>
+        </form>
+        
+        <!-- Lien vers mes vidéos -->
+        <div class="profile-links">
+            <a href="{% url 'home' %}">📹 Voir mes vidéos</a>
+            <a href="{% url 'logout' %}">🚪 Déconnexion</a>
+        </div>
+        
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VideoStreamingPlatform{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    
+    <!-- ===== BARRE DE NAVIGATION ===== -->
+    <div class="navbar">
+        <div class="navbar-container">
+            
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="logo">
+                📹 VideoPlatform
+            </a>
+            
+            <!-- Recherche -->
+            <form action="{% url 'video_search' %}" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Rechercher une vidéo..." class="search-input">
+                <button type="submit" class="search-btn">🔍</button>
+            </form>
+            
+            <!-- Navigation -->
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'video_upload' %}" class="nav-link">📤 Upload</a>
+                    <a href="{% url 'profile' %}" class="nav-link">👤 {{ user.username }}</a>
+                    <a href="{% url 'logout' %}" class="nav-link nav-link-danger">Déconnexion</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Connexion</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Inscription</a>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+    <div class="navbar-categories">
+        <div class="navbar-container">
+            {% for cat in all_categories %}
+            <a href="{% url 'video_category' cat.slug %}">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- ===== MESSAGES ===== -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- ===== CONTENU ===== -->
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        <p>© 2026 VideoPlatform - Tous droits réservés</p>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Uploader une vidéo - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <div class="upload-container">
+        
+        <h1 class="upload-title">📤 Uploader une vidéo</h1>
+        
+        <form method="POST" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+            <!-- 
+            enctype="multipart/form-data" = OBLIGATOIRE pour uploader des fichiers
+            Sans ça, le fichier vidéo ne sera pas envoyé
+            -->
+            {% csrf_token %}
+            
+            <!-- Titre -->
+            <div class="form-group">
+                <label for="id_title">Titre</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <span class="form-error">{{ form.title.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+                <label for="id_description">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <span class="form-error">{{ form.description.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Fichier vidéo -->
+            <div class="form-group">
+                <label for="id_video_file">Fichier vidéo</label>
+                {{ form.video_file }}
+                <small class="form-help">Formats acceptés : MP4, MOV, AVI, WebM</small>
+                {% if form.video_file.errors %}
+                    <span class="form-error">{{ form.video_file.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Miniature -->
+            <div class="form-group">
+                <label for="id_thumbnail">Miniature (optionnel)</label>
+                {{ form.thumbnail }}
+                <small class="form-help">Image qui représentera votre vidéo</small>
+                {% if form.thumbnail.errors %}
+                    <span class="form-error">{{ form.thumbnail.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Catégorie -->
+            <div class="form-group">
+                <label for="id_category">Catégorie</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <span class="form-error">{{ form.category.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Visibilité -->
+            <div class="form-group">
+                <label for="id_visibility" >Visibilité</label>
+                {{ form.visibility }}
+                {% if form.visibility.errors %}
+                    <span class="form-error">{{ form.visibility.errors.0 }}</span>
+                {% endif %}
+            </div>
+            <div class="loader-container" id="loaderContainer" style="display: none;">
+                <div class="loader"></div>
+                <p class="loader-text">Upload en cours. Veuillez patientez...</p>
+                <p class="loader-warning">Ne fermez pas la page</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                📤 Publier la vidéo
+            </button>
+        </form>
+        
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'JS/script.js' %}"></script>
+{% endblock %}

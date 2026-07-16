@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion - VideoStreamingPlatform{% endblock %}
+
+{% block content %}
+
+    <div class="auth-container">
+        
+        <h1 class="auth-title">Connexion</h1>
+        
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <!-- Champ : Email -->
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <span class="form-error">{{ form.email.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Champ : Mot de passe -->
+            <div class="form-group">
+                <label for="id_password">Mot de passe</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <span class="form-error">{{ form.password.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full">
+                Se connecter
+            </button>
+        </form>
+        
+        <p class="auth-link">
+            Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a>
+        </p>
+        
+    </div>
+
+{% endblock %}

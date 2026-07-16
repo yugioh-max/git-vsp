@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer - {{ video.title }}{% endblock %}
+
+{% block content %}
+
+    <div class="delete-container">
+        
+        <h1 class="delete-title">🗑️ Supprimer la vidéo</h1>
+        
+        <div class="delete-card">
+            
+            <!-- Aperçu rapide de la vidéo à supprimer -->
+            <div class="delete-video-info">
+                {% if video.thumbnail %}
+                    <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="delete-thumbnail">
+                {% else %}
+                    <div class="delete-thumbnail-placeholder">🎬</div>
+                {% endif %}
+                <div>
+                    <h3>{{ video.title }}</h3>
+                    <p>{{ video.views_count }} vues • {{ video.created_at|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            
+            <!-- Message d'avertissement -->
+            <div class="delete-warning">
+                <p>⚠️ <strong>Attention !</strong></p>
+                <p>Cette action est <strong>irréversible</strong>. La vidéo sera définitivement supprimée.</p>
+            </div>
+            
+            <!-- Formulaire de confirmation -->
+            <form method="POST" class="delete-buttons">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    🗑️ Oui, supprimer cette vidéo
+                </button>
+                <a href="{% url 'video_detail' video.id %}" class="btn btn-cancel">
+                    Non, revenir à la vidéo
+                </a>
+            </form>
+            
+        </div>
+        
+    </div>
+
+{% endblock %}
+

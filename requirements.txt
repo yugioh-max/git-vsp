@@ -1,0 +1,14 @@
+Django
+cloudinary
+django-cloudinary-storage
+python-dotenv
+pillow
+pip
+asgiref
+setuptools
+sqlparse
+pytz
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier - {{ video.title }}{% endblock %}
+
+{% block content %}
+
+    <div class="upload-container">
+        
+        <h1 class="upload-title">✏️ Modifier la vidéo</h1>
+        
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            
+            <!-- Titre -->
+            <div class="form-group">
+                <label for="id_title">Titre</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <span class="form-error">{{ form.title.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+                <label for="id_description">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <span class="form-error">{{ form.description.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Miniature actuelle -->
+            {% if video.thumbnail %}
+                <div class="form-group">
+                    <label>Miniature actuelle</label>
+                    <img src="{{ video.thumbnail.url }}" alt="Miniature" class="edit-thumbnail-preview">
+                </div>
+            {% endif %}
+            
+            <!-- Nouvelle miniature -->
+            <div class="form-group">
+                <label for="id_thumbnail">Changer la miniature (optionnel)</label>
+                {{ form.thumbnail }}
+                <small class="form-help">Laissez vide pour garder l'actuelle</small>
+                {% if form.thumbnail.errors %}
+                    <span class="form-error">{{ form.thumbnail.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Catégorie -->
+            <div class="form-group">
+                <label for="id_category">Catégorie</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <span class="form-error">{{ form.category.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Visibilité -->
+            <div class="form-group">
+                <label for="id_visibility" >Visibilité</label>
+                {{ form.visibility }}
+                {% if form.visibility.errors %}
+                    <span class="form-error">{{ form.visibility.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Boutons -->
+            <div class="edit-buttons">
+                <button type="submit" class="btn btn-primary">
+                    💾 Enregistrer les modifications
+                </button>
+                <a href="{% url 'video_detail' video.id %}" class="btn btn-cancel">
+                    Annuler
+                </a>
+            </div>
+        </form>
+        
+    </div>
+
+{% endblock %}
+
