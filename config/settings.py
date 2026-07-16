@@ -31,7 +31,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*.onrender.com", 'localhost']
+ALLOWED_HOSTS = [
+    "video-platform.onrender.com",
+    "localhost",
+    "127.0.0.1"]
 
 
 # Application definition
@@ -122,6 +125,10 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://video-platform.onrender.com',
+]
 
 
 # Internationalization
